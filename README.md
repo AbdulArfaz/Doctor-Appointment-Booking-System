@@ -1,43 +1,57 @@
+# 🩺 DocSlot: Doctor Appointment Booking System
 
-# Doctor Appointment Booking System (DABS) 
+> A comprehensive full-stack, multi-role healthcare web application designed to streamline doctor scheduling, patient interactions, appointment management, and administrative oversight.
 
-### 🌐 Live Links
-- *User Frontend:* [doctor-appointment-swart-one.vercel.app](https://doctor-appointment-swart-one.vercel.app)
-- *Admin/Doctor Dashboard:* [doctor-appointment-nmli.vercel.app](https://doctor-appointment-nmli.vercel.app)
+---
 
-A comprehensive full-stack multi-role web application designed to streamline administration, user interactions, and backend services.
+## 🌐 Live Links
 
-## Features
+*   *User Frontend:* [Access Patient Portal](https://doctor-appointment-swart-one.vercel.app)
+*   *Admin/Doctor Dashboard:* [Access Management Portal](https://doctor-appointment-nmli.vercel.app)
 
-- Admin & Doctor Panel: Manage appointments, doctors, and system settings securely.
-- Frontend Client: User-friendly interface for clients and patients.
-- Backend API: Robust Node.js server handling authentication, databases, and file management.
+---
 
-## Tech Stack & Libraries
+## ✨ Key Features & Capabilities
 
-- Frontend & Admin Panels:
-  - React, Vite, React Router
+*   🏥 *Multi-Role Dashboards:* Tailored interfaces for Patients, Doctors, and Administrators.
+*   📅 *Appointment Scheduling:* Real-time slot booking, rescheduling, and cancellation management.
+*   🔐 *Secure Authentication:* Robust dual-token architecture using *JWT (Access & Refresh Tokens)* paired with *Bcrypt* password hashing.
+*   📁 *Cloud File Management:* Seamless profile and document uploads handled via *Multer* and stored securely in *Cloudinary*.
+*   ⚡ *Responsive UI:* Fast, dynamic client-side interactions powered by *React, Vite, and React Router*.
 
-- Backend & Security: 
-  - Node.js, Express
-  - JWT (JSON Web Tokens): Secure dual-token architecture using Access Tokens  and Refresh Tokens.
-  - Bcrypt: For secure password hashing.
-  - Multer: For handling multipart/form-data and file/image uploads.
-  - Cloudinary: For cloud-based image storage and management.
+---
 
-- Database:
-  - MongoDB & Mongoose
+## 🛠️ Tech Stack & Libraries
 
-# Deployment & Infrastructure
+### *Frontend & Admin Panels*
+*   *React.js* (Component architecture)
+*   *Vite* (Next-generation frontend tooling)
+*   *React Router* (Client-side routing)
 
-- Frontend & Admin Panels: Deployed and hosted on Vercel with continuous integration from GitHub.
-- Backend API: Hosted as a web service on Render, connected to MongoDB Atlas.
+### *Backend & Security*
+*   *Node.js & Express.js* (REST API Server)
+*   *JWT (JSON Web Tokens)* (Secure Access & Refresh token flow)
+*   *Bcrypt* (Secure password hashing & encryption)
+*   *Multer* (Multipart/form-data handler for file uploads)
+*   *Cloudinary* (Cloud image storage & optimization)
 
+### *Database*
+*   *MongoDB & Mongoose* (NoSQL Database & ODM)
 
-## Project Structure
+---
+
+## 🚀 Deployment & Infrastructure
+
+*   *Frontend & Admin Panels:* Deployed and hosted on *Vercel* with continuous deployment from GitHub.
+*   *Backend API:* Hosted as a secure web service on *Render, connected live to **MongoDB Atlas*.
+
+---
+
+## 📁 Project Structure
 
 ```text
-DABS/
-├── Admin/         # Admin and Doctor dashboard application
-├── backend/       # Node.js server and API
-└── frontend/      # Client-facing web application
+DocSlot/
+│
+├── admin/          # Admin and Doctor dashboard application
+├── backend/        # Node.js server and API
+└── frontend/       # Client-facing web application
