@@ -6,8 +6,8 @@
 
 ## 🌐 Live Links
 
-*   User Frontend: [Access Patient Portal](https://doctor-appointment-swart-one.vercel.app)
-*   Admin/Doctor Dashboard: [Access Management Portal](https://doctor-appointment-nmli.vercel.app)
+*   *User Frontend:* 👉 [https://doctor-appointment-swart-one.vercel.app](https://doctor-appointment-swart-one.vercel.app)
+*   *Admin/Doctor Dashboard:* 👉 [https://doctor-appointment-nmli.vercel.app](https://doctor-appointment-nmli.vercel.app)
 *
 
 ---
