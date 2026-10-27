@@ -14,9 +14,7 @@ const MyProfile = () => {
 
   const fetchProfile = async () => {
     try {
-      const response = await axios.get("/api/user/get-profile", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
+      const response = await axios.get(`${backendurl}/api/user/get-profile`);
 
       const profileData = response.data.data || response.data.user;
       if (profileData) {
@@ -63,13 +61,7 @@ const MyProfile = () => {
 
       const response = await axios.put(
         `${backendurl}/api/user/update-profile`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "multipart/form-data",
-          },
-        },
+        formData
       );
       if (response.data.success) {
         setUserData(response.data.user);

@@ -1,121 +1,120 @@
 import React, { useContext, useState } from "react";
-import '../styles/Login.css'
- import axios from "axios";
+import "../styles/Login.css";
+import axios from "axios";
 import { AppContext } from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useEffect } from "react";
 
 const Login = () => {
- 
-  const {backendurl,setToken,setUserData} = useContext(AppContext)
-  const navigate  = useNavigate()
+  const { backendurl, setToken, setUserData } = useContext(AppContext);
+  const navigate = useNavigate();
 
   const [state, setState] = useState("Sign Up");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
- 
-  const handleSubmit =async (evt) => {
+
+  const handleSubmit = async (evt) => {
     evt.preventDefault();
 
     try {
-      if (state === 'Sign Up') {
-        const {data} = await axios.post(`${backendurl}/api/user/register`,{name,email,password})
-        if(data.success || data.statusCode === 200 || data.statusCode ===201){
-          localStorage.setItem('token', data.token)
-          setToken(data.token)
-          toast.success("Account Created! Please Login. ")
-          setState('Login')
-        }else{
-          toast.error(data.message)
+      if (state === "Sign Up") {
+        const { data } = await axios.post(
+          `${backendurl}/api/user/register`,
+          { name, email, password }
+        );
+
+        if (data.success) {
+          toast.success("Account created! Please log in.");
+          setState("Login");
+          setPassword("");
+        } else {
+          toast.error(data.message || "Registration failed");
         }
-      }else{
-        const {data} = await axios.post(`${backendurl}/api/user/login`,{email,password})
-        if (data.success || data.statusCode === 200) {
-          const accessToken = data.data.accessToken
-          localStorage.setItem('token', accessToken)
-          setToken(accessToken)
-          setUserData(data.data.user)
-          toast.success('Logged in Successfully')
-          navigate('/')
-        }else{
-          toast.error(data.message)
-        }
+
+        return;
+      }
+
+      const { data } = await axios.post(
+        `${backendurl}/api/user/login`,
+        { email, password },
+        { withCredentials: true}
+      );
+
+      if (data.success && data.data?.user) {
+        setUserData(data.data.user);
+        setToken(true);
+
+        toast.success("Logged in successfully");
+        navigate("/");
+      } else {
+        toast.error(data.message || "Login failed");
       }
     } catch (error) {
-      const backendMessage = error.response?.data?.message || error.response?.data;
+      const message =
+        error.response?.data?.message ||
+        (error.response?.status === 404
+          ? "User does not exist"
+          : error.message || "Something went wrong");
 
-      const errorMessage = typeof backendMessage === 'string'
-      ? backendMessage
-      : (error.response?.status === 404 ? "User does not exist" : error.message)
-      toast.error(errorMessage)
+      toast.error(message);
     }
   };
 
-
-
   return (
-    <>
-    <form onSubmit={handleSubmit} className="login-box">
-  <p className="form-header">{state === "Sign Up" ? "Create Account" : "Login"}</p>
-  <p className="form-subtext">
-    Please {state === "Sign Up" ? "sign up" : "log in"} to book appointment
-  </p>
+    <form onSubmit={handleSubmit} className="login-form">
+      <div className="login-title">
+        <p>{state === "Sign Up" ? "Create Account" : "Login"}</p>
+      </div>
 
-  {state === "Sign Up" && (
-    <div className="form-group">
-      <p className="field-label">Full Name</p>
-      <input
-        type="text"
-        className="field-input"
-        onChange={(evt) => setName(evt.target.value)}
-        value={name}
-      />
-    </div>
-  )}
+      {state === "Sign Up" && (
+        <div className="login-input">
+          <p>Full Name</p>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
+      )}
 
-  <div className="form-group">
-    <p className="field-label">Email</p>
-    <input
-      type="email"
-      className="field-input"
-      onChange={(evt) => setEmail(evt.target.value)}
-      value={email}
-    />
-  </div>
+      <div className="login-input">
+        <p>Email</p>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      </div>
 
-  <div className="form-group">
-    <p className="field-label">Password</p>
-    <input
-      type="password"
-      className="field-input"
-      onChange={(evt) => setPassword(evt.target.value)}
-      value={password}
-    />
-  </div>
+      <div className="login-input">
+        <p>Password</p>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </div>
 
-  <button type="submit" className="submit-btn">
-    {state === "Sign Up" ? "Create Account" : "Login"}
-  </button>
+      <button type="submit">
+        {state === "Sign Up" ? "Create Account" : "Login"}
+      </button>
 
-  {state === "Sign Up" ? (
-    <p className="switch-mode-text">
-      Already have an account?{" "}
-      <span onClick={() => setState("Login")} className="switch-mode-btn">
-        Login here
-      </span>
-    </p>
-  ) : (
-    <p className="switch-mode-text">
-      Create a New Account?{" "}
-      <span onClick={() => setState("Sign Up")} className="switch-mode-btn">
-        Click here
-      </span>
-    </p>
-  )}
-</form>
-    </>
+      {state === "Sign Up" ? (
+        <p>
+          Already have an account?{" "}
+          <span onClick={() => setState("Login")}>Login here</span>
+        </p>
+      ) : (
+        <p>
+          Create a new account?{" "}
+          <span onClick={() => setState("Sign Up")}>Click here</span>
+        </p>
+      )}
+    </form>
   );
 };
 

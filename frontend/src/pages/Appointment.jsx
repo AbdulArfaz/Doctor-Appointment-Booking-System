@@ -101,7 +101,11 @@ const bookAppointment = async () =>{
     return toast.warn('Please select a time slot first')
   }
   try { 
-        if (!docSlots || !docSlots[slotIndex] || !docSlots[slotIndex].length === 0) {
+        if (
+          !docSlots || 
+          !docSlots[slotIndex] || 
+          !docSlots[slotIndex].length === 0
+        ) {
           return toast.error('Selected slot is invalid or unavailable')
         }
     const date = docSlots[slotIndex][0].datetime
@@ -112,8 +116,7 @@ const bookAppointment = async () =>{
     const slotDate = `${day}_${month}_${year}`;
 
   const { data } = await axios.post(`${backendurl}/api/user/book-appointment`,
-    {docId: drInfo._id, slotDate, slotTime},
-    {headers: {Authorization: `Bearer ${token}`}}
+    {docId: drInfo._id, slotDate, slotTime}
   )
   if (data.success) {
     toast.success(data.message)
