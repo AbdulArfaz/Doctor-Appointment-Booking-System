@@ -17,6 +17,7 @@ const Navbar = () => {
     { name: "DOCTORS", path: "/doctors" },
     { name: "ABOUT", path: "/about" },
     { name: "CONTACT", path: "/contact" },
+    { name: "STAFF LOGIN", path: "/staff-login" },
   ];
 
   const closeMenus = () => {
