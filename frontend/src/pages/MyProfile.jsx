@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { assets } from "../assets/assets";
-import "../styles/MyProfile.css";
 import axios from "axios";
 import { AppContext } from "../context/AppContext";
 
