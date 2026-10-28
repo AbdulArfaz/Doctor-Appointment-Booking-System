@@ -65,7 +65,7 @@ const addDoctor = asyncHandler (async (req,res)=>{
 const loginAdmin = asyncHandler(async (req,res)=>{
 
       const {email,password} = req.body
-    if(!password && !email){
+    if(!password || !email){
         throw new ApiError(400,"Email and password are required")
     }
  
@@ -79,19 +79,20 @@ const loginAdmin = asyncHandler(async (req,res)=>{
       throw new ApiError(401, "Invalid admin credentials")
     }
     const accessToken = admin.generateAccessToken()
-     const options = {
+     const cookieOptions = {
       httpOnly: true,
-      secure: true
+      secure: true,
+      sameSite: "none",
+      path: "/",
      }
      
      return res
      .status(200)
-     .cookie("accessToken", accessToken, options)
+     .cookie("adminAccessToken", accessToken, cookieOptions)
      .json(
       new ApiResponse(
         200,
         {
-          accessToken,
           admin: {
             _id: admin._id,
             name: admin.name,
@@ -103,6 +104,24 @@ const loginAdmin = asyncHandler(async (req,res)=>{
       )
      )
 })
+
+const logoutAdmin = asyncHandler(async (req, res) => {
+  const cookieOptions = {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
+  };
+
+  return res
+    .clearCookie("adminAccessToken", cookieOptions)
+    .status(200)
+    .json({
+      success: true,
+      message: "Admin logged out successfully",
+    });
+});
+
 
 const allDoctorsList = asyncHandler(async(req,res)=>{
 
@@ -173,4 +192,4 @@ export const adminDashboard = asyncHandler  (async (req,res) =>{
      .json( new ApiResponse(200, dashData,"Dashboard data fetched successfully"))    
 })
 
-export {addDoctor,loginAdmin,allDoctorsList}
+export {addDoctor,loginAdmin,allDoctorsList, logoutAdmin}

@@ -2,20 +2,18 @@ import React from "react";
 import { useContext } from "react";
 import { AdminContext } from "../../context/AdminContext.jsx";
 import { useEffect } from "react";
-import { AppContext } from "../../context/AppContext.jsx";
+import { AppContext } from "../../context/AdminAppContext.jsx";
 import { assets } from "../../assets_admin/assets.js";
 import '../../styles/AdminAllAppointments.css'
 
 const AdminAllAppointments = () => {
-  const { adminToken, appointments, getAllAppointments, adminAppointmentCancel } =
+  const { appointments, getAllAppointments, adminAppointmentCancel } =
     useContext(AdminContext);
   const { calculateAge, dateFormat, currency } = useContext(AppContext);
 
   useEffect(() => {
-    if (adminToken) {
       getAllAppointments();
-    }
-  }, [adminToken]);
+  }, []);
 
 return (
   <div className="ad-ap-container">
@@ -38,7 +36,7 @@ return (
           <p className="ad-ap-index">{index + 1}</p>
 
           <div className="ad-ap-user">
-            <img className="ad-ap-img" src={item.userData.image} alt="" />
+            <img className="ad-ap-img" src={item.userData.image || assets.patients_icon} alt="" />
             <p className="ad-ap-name">{item.userData.name}</p>
           </div>
 
@@ -49,7 +47,7 @@ return (
           </p>
 
           <div className="ad-ap-user">
-            <img className="ad-ap-img ad-ap-doc-img" src={item.docData.image} alt="" />
+            <img className="ad-ap-img ad-ap-doc-img" src={item.docData.image ||assets.patients_icon} alt="" />
             <p className="ad-ap-name">{item.docData.name}</p>
           </div>
 

@@ -4,7 +4,7 @@ import { AdminContext } from "../../context/AdminContext.jsx";
 import { useEffect } from "react";
 import { assets } from "../../assets_admin/assets.js";
 import "../../styles/Dashboard.css";
-import { AppContext } from "../../context/AppContext.jsx";
+import { AppContext } from "../../context/AdminAppContext.jsx";
 
 const Dashboard = () => {
   const { dashData, adminToken, getDashData, adminAppointmentCancel } =
@@ -13,10 +13,8 @@ const Dashboard = () => {
   const { dateFormat } = useContext(AppContext)  
 
   useEffect(() => {
-    if (adminToken) {
       getDashData();
-    }
-  }, [adminToken]);
+  }, []);
 
   if (!dashData) {
     return <p>Loading ...</p>;

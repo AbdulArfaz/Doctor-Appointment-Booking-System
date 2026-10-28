@@ -4,13 +4,11 @@ import '../../styles/AdminDoctorList.css'
 
 const AdminDoctorList = () => {
 
-const { doctorslist, adminToken, getAllDoctorsList, changeAvailability } = useContext(AdminContext)
+const { doctorslist, getAllDoctorsList, changeAvailability } = useContext(AdminContext)
 
 useEffect(()=>{
-if (adminToken) {
   getAllDoctorsList()
-}
-},[adminToken])
+},[])
   return (
 
           <div className='dr-list-page'>

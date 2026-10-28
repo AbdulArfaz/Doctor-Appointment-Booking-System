@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useContext } from "react";
 import { DoctorContext } from "../../context/DoctorContext";
-import { AppContext } from "../../context/AppContext";
+import { AppContext } from "../../context/AdminAppContext";
 import { useEffect } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify'
 import "../../styles/DoctorProfile.css";
 
 const DoctorProfile = () => {
-  const { docToken, profileData, setProfileData, getProfileData, backendurl } =
+  const {  profileData, setProfileData, getProfileData, backendurl } =
     useContext(DoctorContext);
   const { currency } = useContext(AppContext);
 
@@ -30,11 +30,7 @@ const DoctorProfile = () => {
       const { data } = await axios.post(
         `${backendurl}/api/doctors/update-profile`,
         formData,
-        {
-          headers: {
-            Authorization: `Bearer ${docToken}`,
-          },
-        },
+        { withCredentials: true}
       );
       if (data.success) {
         toast.success(data.message || "Profile updated successfully!");
@@ -60,13 +56,12 @@ const changeAvailability = async () => {
     const { data } = await axios.post(
       `${backendurl}/api/doctors/change-availability`,
       { docId: profileData._id },
-      { headers: {Authorization: `Bearer ${docToken}` }} // Or whatever your doctor token variable is named
+      { withCredentials: true}
     );
 
     if (data.success) {
       toast.success(data.message);
       getProfileData()
-      // Fetch the profile data again so everything stays synced 
     } else {
       toast.error(data.message);
     }
@@ -78,10 +73,8 @@ const changeAvailability = async () => {
 
 
   useEffect(() => {
-    if (docToken) {
       getProfileData();
-    }
-  }, [docToken]);
+  }, []);
 
   return (
     profileData && (

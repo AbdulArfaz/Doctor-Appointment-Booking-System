@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { DoctorContext } from "../../context/DoctorContext";
 import { useEffect } from "react";
 import { assets } from "../../assets_admin/assets.js";
-import { AppContext } from "../../context/AppContext";
+import { AppContext } from "../../context/AdminAppContext";
 import "../../styles/DoctorDashboard.css";
 
 const DoctorDashboard = () => {
@@ -11,17 +11,14 @@ const DoctorDashboard = () => {
     dashData,
     setDashData,
     getDashData,
-    docToken,
     completeAppointment,
     cancelAppointment,
   } = useContext(DoctorContext);
   const { currency, dateFormat } = useContext(AppContext);
 
   useEffect(() => {
-    if (docToken) {
       getDashData();
-    }
-  }, [docToken]);
+  }, []);
 
   return (
     dashData && (
@@ -72,7 +69,7 @@ const DoctorDashboard = () => {
               <div className="dash-doc-item" key={index}>
                 <img
                   className="dash-doc-user-img"
-                  src={item.userData.image}
+                  src={item.userData.image || assets.patients_icon}
                   alt=""
                 />
                 <div className="dash-doc-item-info">

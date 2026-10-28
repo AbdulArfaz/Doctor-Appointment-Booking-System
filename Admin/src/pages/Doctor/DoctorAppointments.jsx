@@ -2,13 +2,12 @@ import React from "react";
 import { useContext } from "react";
 import { DoctorContext } from "../../context/DoctorContext";
 import { useEffect } from "react";
-import { AppContext } from "../../context/AppContext";
+import { AppContext } from "../../context/AdminAppContext";
 import { assets } from "../../assets_admin/assets.js";
 import "../../styles/DoctorAppointments.css";
 
 const DoctorAppointments = () => {
   const {
-    docToken,
     appointments,
     getAppointments,
     completeAppointment,
@@ -17,10 +16,8 @@ const DoctorAppointments = () => {
   const { calculateAge, dateFormat, currency } = useContext(AppContext);
 
   useEffect(() => {
-    if (docToken) {
       getAppointments();
-    }
-  }, [docToken]);
+  }, []);
 
   return (
     <div className="doc-ap-container">
@@ -44,7 +41,7 @@ const DoctorAppointments = () => {
             <div className="doc-ap-patient">
               <img
                 className="doc-ap-avatar"
-                src={item.userData.image}
+                src={item.userData.image || assets.patients_icon}
                 alt="Patient"
               />
               <p className="doc-ap-patient-name">{item.userData.name}</p>
