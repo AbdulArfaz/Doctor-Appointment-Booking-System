@@ -1,117 +1,283 @@
-import React from "react";
-import { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { DoctorContext } from "../../context/DoctorContext";
-import { useEffect } from "react";
 import { assets } from "../../assets_admin/assets.js";
 import { AppContext } from "../../context/AdminAppContext";
-import "../../styles/DoctorDashboard.css";
 
 const DoctorDashboard = () => {
-  const {
-    dashData,
-    setDashData,
-    getDashData,
-    completeAppointment,
-    cancelAppointment,
-  } = useContext(DoctorContext);
-  const { currency, dateFormat } = useContext(AppContext);
+const {
+dashData,
+getDashData,
+completeAppointment,
+cancelAppointment,
+} = useContext(DoctorContext);
 
-  useEffect(() => {
-      getDashData();
-  }, []);
+const { currency, dateFormat } = useContext(AppContext);
 
-  return (
-    dashData && (
-      <div className="dash-doc-container">
-        <div className="dash-doc-grid">
-          <div className="dash-doc-card dash-doc-card-earning">
-            <div className="dash-doc-icon">
-              <img src={assets.earning_icon} alt="Doctors" />
-            </div>
-            <div>
-              <p className="dash-doc-num">
-                {currency}
-                {dashData.earnings}
+useEffect(() => {
+getDashData();
+}, []);
+
+if (!dashData) {
+return (
+<div className="flex min-h-[60vh] items-center justify-center bg-slate-50 px-4">
+<div className="flex flex-col items-center gap-4">
+<div className="h-12 w-12 animate-spin rounded-full border-4 border-indigo-100 border-t-indigo-600" />
+<p className="text-sm font-medium text-slate-500">
+Loading your dashboard...
+</p>
+</div>
+</div>
+);
+}
+
+const stats = [
+{
+label: "Total Earnings",
+value: `${currency}${dashData.earnings ?? 0}`,
+image: assets.earning_icon,
+gradient: "from-blue-50 to-white",
+iconBg: "bg-blue-100",
+accent: "text-blue-600",
+border: "hover:border-blue-200",
+},
+{
+label: "Appointments",
+value: dashData.appointments ?? 0,
+image: assets.appointments_icon,
+gradient: "from-violet-50 to-white",
+iconBg: "bg-violet-100",
+accent: "text-violet-600",
+border: "hover:border-violet-200",
+},
+{
+label: "Total Patients",
+value: dashData.patients ?? 0,
+image: assets.patients_icon,
+gradient: "from-emerald-50 to-white",
+iconBg: "bg-emerald-100",
+accent: "text-emerald-600",
+border: "hover:border-emerald-200",
+},
+];
+
+const latestAppointments = dashData.latestAppointments ?? [];
+
+const getStatus = (item) => {
+if (item.cancelled) return "Cancelled";
+if (item.isCompleted) return "Completed";
+return "Pending";
+};
+
+const statusStyles = {
+Cancelled: "border-rose-200 bg-rose-50 text-rose-700",
+Completed: "border-emerald-200 bg-emerald-50 text-emerald-700",
+Pending: "border-amber-200 bg-amber-50 text-amber-700",
+};
+
+return (
+<div className="min-h-screen bg-slate-50 px-4 py-6 text-slate-800 sm:px-6 sm:py-8 lg:px-8">
+<div className="mx-auto max-w-7xl">
+
+<div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+<div>
+<p className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-indigo-600">
+DocSlot Healthcare
+</p>
+
+        <h1 className="text-3xl font-bold tracking-tight text-slate-800 sm:text-4xl">
+          Doctor{" "}
+          <span className="bg-linear-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
+            Dashboard
+          </span>
+        </h1>
+
+        <p className="mt-2 max-w-xl text-sm leading-6 text-slate-500 sm:text-base">
+          Track your earnings, manage appointments and stay up to date with
+          your patients.
+        </p>
+      </div>
+
+      <div className="flex w-fit items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2.5">
+        <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
+        <span className="text-xs font-semibold text-emerald-700">
+          Dashboard Active
+        </span>
+      </div>
+    </div>
+
+  
+    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      {stats.map((stat) => (
+        <div
+          key={stat.label}
+          className={`group relative overflow-hidden rounded-2xl border border-slate-200 bg-linear-to-br ${stat.gradient} p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-100/50 sm:p-6 ${stat.border}`}
+        >
+          <div className="absolute -right-8 -top-8 h-28 w-28 rounded-full bg-indigo-100/40 transition-transform duration-500 group-hover:scale-150" />
+
+          <div className="relative flex items-center justify-between gap-4">
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-slate-500">
+                {stat.label}
               </p>
-              <p className="dash-doc-lbl">Earning</p>
-            </div>
-          </div>
 
-          <div className="dash-doc-card dash-doc-card-app">
-            <div className="dash-doc-icon">
-              <img src={assets.appointments_icon} alt="Appointments" />
-            </div>
-            <div>
-              <p className="dash-doc-num">{dashData.appointments}</p>
-              <p className="dash-doc-lbl">Appointments</p>
-            </div>
-          </div>
+              <p className="mt-3 wrap-break-word text-3xl font-bold tracking-tight text-slate-800 sm:text-4xl">
+                {stat.value}
+              </p>
 
-          <div className="dash-doc-card dash-doc-card-pat">
-            <div className="dash-doc-icon">
-              <img src={assets.patients_icon} alt="Patients" />
+              <p className={`mt-3 text-xs font-semibold ${stat.accent}`}>
+                Current total
+              </p>
             </div>
-            <div>
-              <p className="dash-doc-num">{dashData.patients}</p>
-              <p className="dash-doc-lbl">Patients</p>
+
+            <div
+              className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${stat.iconBg} ring-1 ring-black/5 transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110 sm:h-16 sm:w-16`}
+            >
+              <img
+                src={stat.image}
+                alt=""
+                className="h-7 w-7 object-contain sm:h-8 sm:w-8"
+              />
             </div>
           </div>
         </div>
+      ))}
+    </div>
 
-        <div className="dash-doc-list-box">
-          <div className="dash-doc-list-hdr">
-            <img src={assets.list_icon} alt="" />
-            <p>Latest Booking</p>
+  
+    <section className="mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm sm:mt-10">
+      <div className="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-7">
+        <div className="flex items-center gap-3">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-indigo-50 ring-1 ring-indigo-100">
+            <img
+              src={assets.list_icon}
+              alt=""
+              className="h-5 w-5 object-contain"
+            />
           </div>
 
-          <div className="dash-doc-list-body">
-            {dashData.latestAppointments.map((item, index) => (
-              <div className="dash-doc-item" key={index}>
+          <div>
+            <h2 className="text-lg font-bold text-slate-800 sm:text-xl">
+              Latest Bookings
+            </h2>
+            <p className="mt-1 text-xs text-slate-500">
+              Recent patient appointment activity
+            </p>
+          </div>
+        </div>
+
+        <span className="w-fit rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700">
+          {latestAppointments.length} recent{" "}
+          {latestAppointments.length === 1 ? "booking" : "bookings"}
+        </span>
+      </div>
+
+      {latestAppointments.length === 0 ? (
+        <div className="flex flex-col items-center px-5 py-14 text-center">
+          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100">
+            <img
+              src={assets.appointments_icon}
+              alt=""
+              className="h-7 w-7 object-contain opacity-70"
+            />
+          </div>
+
+          <h3 className="font-semibold text-slate-800">
+            No appointments yet
+          </h3>
+
+          <p className="mt-1 text-sm text-slate-500">
+            New patient bookings will appear here.
+          </p>
+        </div>
+      ) : (
+        <div className="divide-y divide-slate-100">
+          {latestAppointments.map((item, index) => (
+            <div
+              key={item._id || index}
+              className="group flex flex-col gap-4 px-5 py-4 transition-colors duration-200 hover:bg-indigo-50/40 sm:flex-row sm:items-center sm:justify-between sm:px-7"
+            >
+            
+              <div className="flex min-w-0 items-center gap-3">
                 <img
-                  className="dash-doc-user-img"
-                  src={item.userData.image || assets.patients_icon}
-                  alt=""
+                  className="h-12 w-12 shrink-0 rounded-2xl border border-slate-200 bg-slate-50 object-cover sm:h-14 sm:w-14"
+                  src={item.userData?.image || assets.patients_icon}
+                  alt={item.userData?.name || "Patient"}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = assets.patients_icon;
+                  }}
                 />
-                <div className="dash-doc-item-info">
-                  <p className="dash-doc-item-name">{item.userData.name}</p>
-                  <p className="dash-doc-item-date">
+
+                <div className="min-w-0">
+                  <p className="truncate font-semibold text-slate-800 transition-colors group-hover:text-indigo-700">
+                    {item.userData?.name || "Patient"}
+                  </p>
+
+                  <p className="mt-1 text-xs text-slate-500">
+                    Appointment #{index + 1}
+                  </p>
+
+                  <p className="mt-1 text-xs text-slate-400">
                     {dateFormat(item.slotDate)}
+                    {item.slotTime ? ` · ${item.slotTime}` : ""}
                   </p>
                 </div>
+              </div>
 
-                {item.cancelled ? (
-                  <p className="dash-doc-status-text dash-doc-status-cancelled">
-                    Cancelled
-                  </p>
-                ) : item.isCompleted ? (
-                  <p className="dash-doc-status-text dash-doc-status-completed">
-                    Completed
-                  </p>
-                ) : (
-                  <div className="dash-doc-ap-actions">
+        
+              <div className="flex items-center justify-between gap-3 sm:justify-end">
+                <span
+                  className={`inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-semibold ${statusStyles[getStatus(item)]}`}
+                >
+                  <span className="h-1.5 w-1.5 rounded-full bg-current" />
+                  {getStatus(item)}
+                </span>
+
+                {!item.cancelled && !item.isCompleted && (
+                  <div className="flex items-center gap-2">
                     <button
-                      className="dash-doc-ap-btn dash-doc-ap-cancel-btn"
-                      aria-label="Cancel"
+                      type="button"
+                      title="Cancel appointment"
+                      aria-label={`Cancel appointment for ${item.userData?.name || "patient"}`}
                       onClick={() => cancelAppointment(item._id)}
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-rose-200 bg-white transition hover:border-rose-300 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-rose-200"
                     >
-                      <img src={assets.cancel_icon} alt="cancel" />
+                      <img
+                        src={assets.cancel_icon}
+                        alt=""
+                        className="h-4 w-4 object-contain"
+                      />
                     </button>
+
                     <button
-                      className="dash-doc-ap-btn dash-doc-ap-tick-btn"
-                      aria-label="Confirm"
+                      type="button"
+                      title="Mark appointment as completed"
+                      aria-label={`Complete appointment for ${item.userData?.name || "patient"}`}
                       onClick={() => completeAppointment(item._id)}
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-emerald-200 bg-white transition hover:border-emerald-300 hover:bg-emerald-50 focus:outline-none focus:ring-2 focus:ring-emerald-200"
                     >
-                      <img src={assets.tick_icon} alt="tick" />
+                      <img
+                        src={assets.tick_icon}
+                        alt=""
+                        className="h-4 w-4 object-contain"
+                      />
                     </button>
                   </div>
                 )}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      </div>
-    )
-  );
+      )}
+    </section>
+
+    <p className="mt-6 text-center text-xs text-slate-400">
+      DocSlot · Doctor Workspace
+    </p>
+  </div>
+</div>
+
+);
 };
 
 export default DoctorDashboard;
