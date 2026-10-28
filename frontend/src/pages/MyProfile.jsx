@@ -14,7 +14,7 @@ const MyProfile = () => {
   const [image, setImage] = useState(false);
   const [edit, setEdit] = useState(false);
 
-  // Use HTTPS for Cloudinary images and provide a fallback.
+
   const secureImageUrl = (url) => {
     if (!url) return assets.profile_pic;
 

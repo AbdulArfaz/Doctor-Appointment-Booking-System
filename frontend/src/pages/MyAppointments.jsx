@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react";
 import { AppContext } from "../context/AppContext";
-import "../styles/MyAppointments.css";
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
