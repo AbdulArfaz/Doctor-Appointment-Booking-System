@@ -1,58 +1,89 @@
-# 🩺 DocSlot: Doctor Appointment Booking System
+🩺 DocSlot — Doctor Appointment Booking System
 
-> A comprehensive full-stack, multi-role healthcare web application designed to streamline doctor scheduling, patient interactions, appointment management, and administrative oversight.
+DocSlot is a full-stack, multi-role healthcare web application built using the MERN stack. It simplifies doctor appointment scheduling and management by providing dedicated interfaces for patients, doctors, and administrators.
 
----
+🌐 Live Demo
 
-## 🌐 Live Links
+-*   DocSlot Live URL: 👉 [https://doctor-appointment-swart-one.vercel.app](https://doctor-appointment-swart-one.vercel.app)
+- Frontend: Deployed on Vercel
+- Backend API: Deployed on Render
 
-*   *User Frontend:* 👉 [https://doctor-appointment-swart-one.vercel.app](https://doctor-appointment-swart-one.vercel.app)
-*   *Admin/Doctor Dashboard:* 👉 [https://doctor-appointment-nmli.vercel.app](https://doctor-appointment-nmli.vercel.app)
-*
+✨ Key Features
 
----
+- Multi-Role Dashboards: Dedicated interfaces for patients, doctors, and administrators.
+- Appointment Management: Book, view, and manage doctor appointments.
+- Doctor Management: Admins can add doctors and manage doctor information.
+- Authentication & Authorization: JWT-based authentication with access and refresh tokens.
+- Secure Password Storage: Password hashing using bcrypt.
+- Profile Management: Manage user and doctor profile information.
+- Cloud File Uploads: Upload profile images using Multer and Cloudinary.
+- Responsive Interface: Built with React and Vite for a smooth user experience.
+- Client-Side Routing: Navigate between patient and staff pages using React Router.
 
-## ✨ Key Features & Capabilities
+🛠️ Tech Stack
 
-*   🏥 *Multi-Role Dashboards:* Tailored interfaces for Patients, Doctors, and Administrators.
-*   📅 *Appointment Scheduling:* Real-time slot booking, rescheduling, and cancellation management.
-*   🔐 *Secure Authentication:* Robust dual-token architecture using *JWT (Access & Refresh Tokens)* paired with *Bcrypt* password hashing.
-*   📁 *Cloud File Management:* Seamless profile and document uploads handled via *Multer* and stored securely in *Cloudinary*.
-*   ⚡ *Responsive UI:* Fast, dynamic client-side interactions powered by *React, Vite, and React Router*.
+Frontend
 
----
+- React.js
+- Vite
+- React Router
+- JavaScript
+- Tailwind CSS
 
-## 🛠️ Tech Stack & Libraries
+Backend
 
-### *Frontend & Admin Panels*
-*   *React.js* (Component architecture)
-*   *Vite* (Next-generation frontend tooling)
-*   *React Router* (Client-side routing)
+- Node.js
+- Express.js
+- REST APIs
+- JSON Web Tokens (JWT)
+- Bcrypt
+- Multer
 
-### *Backend & Security*
-*   *Node.js & Express.js* (REST API Server)
-*   *JWT (JSON Web Tokens)* (Secure Access & Refresh token flow)
-*   *Bcrypt* (Secure password hashing & encryption)
-*   *Multer* (Multipart/form-data handler for file uploads)
-*   *Cloudinary* (Cloud image storage & optimization)
+Database & Storage
 
-### *Database*
-*   *MongoDB & Mongoose* (NoSQL Database & ODM)
+- MongoDB
+- Mongoose
+- Cloudinary
 
----
+Deployment & Tools
 
-## 🚀 Deployment & Infrastructure
+- Vercel — Frontend hosting
+- Render — Backend hosting
+- MongoDB Atlas — Cloud database
+- Git & GitHub — Version control
 
-*   *Frontend & Admin Panels:* Deployed and hosted on *Vercel* with continuous deployment from GitHub.
-*   *Backend API:* Hosted as a secure web service on *Render, connected live to **MongoDB Atlas*.
+🏗️ Application Architecture
 
----
+DocSlot follows a MERN-based architecture with a unified frontend and a separate backend API.
 
-## 📁 Project Structure
+- Frontend: Contains the patient-facing interface, staff login, admin dashboard, and doctor dashboard.
+- Backend: Handles authentication, authorization, appointment operations, doctor management, and database interactions.
+- Database: MongoDB stores application data, managed through Mongoose.
+- Cloud Storage: Cloudinary stores uploaded images and supported media.
 
-```text
+📁 Project Structure
+
 DocSlot/
 │
-├── admin/          # Admin and Doctor dashboard application
-├── backend/        # Node.js server and API
-└── frontend/       # Client-facing web application
+├── Frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── pages/
+│   │   │   ├── Admin/
+│   │   │   └── Doctor/
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── package.json
+│   └── vite.config.js
+│
+└── backend/
+    ├── db/
+    ├── controllers/
+    ├── middlewares/
+    ├── models/
+    ├── routes/
+    ├── package.json
+    └── server.js
+
