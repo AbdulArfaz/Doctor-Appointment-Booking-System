@@ -1,14 +1,14 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export const AppContext = createContext();
 
 const AppContextProvider = (props) => {
   const backendurl = import.meta.env.VITE_BACKEND_URL;
   const currencySymbol = "$";
-
+  const location = useLocation();
   axios.defaults.withCredentials = true;
 
   const [doctors, setDoctors] = useState([]);
@@ -85,18 +85,36 @@ const AppContextProvider = (props) => {
     authLoading,
   };
 
-  useEffect(() => {
-    getDoctorsData();
-  }, []);
+useEffect(() => {
+  const isStaffPath =
+    location.pathname.startsWith("/admin-") ||
+    location.pathname.startsWith("/doctor-") ||
+    location.pathname === "/staff-login";
 
-  useEffect(() => {
-    const checkSession = async () => {
-      await loadUserProfileImage();
+  if (isStaffPath) return;
+
+  getDoctorsData();
+}, [location.pathname]);
+
+
+useEffect(() => {
+  const checkSession = async () => {
+    const isStaffPath =
+      location.pathname.startsWith("/admin-") ||
+      location.pathname.startsWith("/doctor-") ||
+      location.pathname === "/staff-login";
+
+    if (isStaffPath) {
       setAuthLoading(false);
-    };
+      return;
+    }
 
-    checkSession();
-  }, []);
+    await loadUserProfileImage();
+    setAuthLoading(false);
+  };
+
+  checkSession();
+}, [location.pathname]);
 
   return (
     <AppContext.Provider value={value}>

@@ -3,50 +3,56 @@ import { AdminContext } from "../context/AdminContext.jsx";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { DoctorContext } from "../context/DoctorContext.jsx";
+import { StaffAuthContext } from "../App.jsx";
+import { useNavigate } from "react-router-dom";
 
 const StaffLogin = () => {
+  const naviagte = useNavigate();
   const [state, setState] = useState("Admin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const { handleStaffLogin } = useContext(StaffAuthContext);
   const { backendurl } = useContext(AdminContext);
   const { setProfileData } = useContext(DoctorContext);
 
   const submitHandler = async (evt) => {
-    evt.preventDefault();
-    setLoading(true);
+  evt.preventDefault();
+  setLoading(true);
 
-    try {
-      const endpoint =
-        state === "Admin"
-          ? "/api/admin/login"
-          : "/api/doctors/login";
+  try {
+    const endpoint =
+      state === "Admin"
+        ? "/api/admin/login"
+        : "/api/doctors/login";
 
-      const { data } = await axios.post(
-        `${backendurl}${endpoint}`,
-        { email, password },
-        { withCredentials: true }
-      );
+    const { data } = await axios.post(
+      `${backendurl}${endpoint}`,
+      { email, password },
+      { withCredentials: true }
+    );
 
-      if (data.success) {
-        if (state === "Doctor") {
-          setProfileData(false);
-        }
-
-        toast.success(data.message || `${state} login successful`);
-        window.location.reload();
-      } else {
-        toast.error(data.message || "Login failed");
+    if (data.success) {
+      if (state === "Doctor") {
+        setProfileData(false);
       }
-    } catch (error) {
-      toast.error(
-        error.response?.data?.message || error.message || "Login failed"
-      );
-    } finally {
-      setLoading(false);
+
+      handleStaffLogin(state);
+
+      toast.success(data.message || `${state} login successful`);
+    } else {
+      toast.error(data.message || "Login failed");
     }
-  };
+  } catch (error) {
+    toast.error(
+      error.response?.data?.message ||
+        error.message ||
+        "Login failed"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   const switchRole = () => {
     setState((prev) => (prev === "Admin" ? "Doctor" : "Admin"));
@@ -55,6 +61,17 @@ const StaffLogin = () => {
   };
 
   return (
+    <>
+     <button
+  type="button"
+  onClick={() => navigate("/")}
+  className="mb-5 inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-blue-600 to-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition-all duration-300 hover:-translate-y-0.5 hover:from-blue-700 hover:to-indigo-700 hover:shadow-xl hover:shadow-indigo-500/30 active:scale-95"
+>
+  <span className="text-lg transition-transform duration-300 group-hover:-translate-x-1">
+    ←
+  </span>
+  Back to Home
+</button>
     <div className="relative flex min-h-[85vh] items-center justify-center overflow-hidden bg-slate-950 px-4 py-12 sm:px-6">
     
       <div className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-indigo-600/25 blur-[100px]" />
@@ -278,6 +295,7 @@ const StaffLogin = () => {
         </p>
       </form>
     </div>
+    </>
   );
 };
 
