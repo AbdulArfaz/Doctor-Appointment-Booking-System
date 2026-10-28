@@ -76,154 +76,168 @@ const MyProfile = () => {
   };
 
   return (
-    <div className="mp-box">
-      <div className="mp-top">
-        {edit ? (
-          <label htmlFor="image" style={{ cursor: "pointer" }}>
-            <img
-              src={
-                image
-                  ? URL.createObjectURL(image)
-                  : userData.image || assets.profile_pic
-              }
-              alt="user"
-              className="mp-img"
-            />
-            <input
-              type="file"
-              id="image"
-              hidden
-              accept="image/*"
-              onChange={(e) => setImage(e.target.files[0])}
-            />
-          </label>
-        ) : (
-          <img
-            src={userData.image || assets.profile_pic}
-            alt="user"
-            className="mp-img"
-          />
-        )}
+<div className="mx-auto my-7.5 w-[95%] max-w-200 rounded-2xl border border-gray-800 bg-gray-900 p-5 font-[system-ui,-apple-system,sans-serif] text-gray-100 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.3)] sm:w-[80%] sm:p-8">
+  <div className="flex flex-col gap-4">
+    {edit ? (
+      <label htmlFor="image" className="w-fit cursor-pointer">
+        <img
+          src={
+            image
+              ? URL.createObjectURL(image)
+              : userData.image || assets.profile_pic
+          }
+          alt="user"
+          className="size-25 rounded-[14px] border-2 border-emerald-500 object-cover"
+        />
+        <input
+          type="file"
+          id="image"
+          hidden
+          accept="image/*"
+          onChange={(e) => setImage(e.target.files[0])}
+        />
+      </label>
+    ) : (
+      <img
+        src={userData.image || assets.profile_pic}
+        alt="user"
+        className="size-25 rounded-[14px] border-2 border-emerald-500 object-cover"
+      />
+    )}
 
-        {edit ? (
+    {edit ? (
+      <input
+        type="text"
+        className="w-full rounded-lg border border-gray-700 bg-gray-800 px-2.5 py-2 text-xl font-semibold text-white outline-none focus:border-emerald-500"
+        value={userData.name}
+        onChange={(e) =>
+          setUserData((prev) => ({ ...prev, name: e.target.value }))
+        }
+      />
+    ) : (
+      <h2 className="m-0 text-2xl font-bold text-white">{userData.name}</h2>
+    )}
+  </div>
+
+  <hr className="my-5 h-px border-0 bg-gray-800" />
+
+  <div className="mb-6">
+    <p className="mb-3.5 text-xs font-bold tracking-[0.08em] text-gray-400 underline underline-offset-4">
+      CONTACT INFORMATION
+    </p>
+
+    <div className="grid grid-cols-1 items-center gap-x-5 gap-y-1 min-[481px]:grid-cols-[160px_minmax(0,1fr)] min-[481px]:gap-y-3.5">
+      <p className="m-0 text-sm font-semibold text-gray-300">Email id:</p>
+      <p className="m-0 break-all text-[0.92rem] text-sky-400">
+        {userData.email}
+      </p>
+
+      <p className="m-0 text-sm font-semibold text-gray-300">Phone:</p>
+      {edit ? (
+        <input
+          type="text"
+          className="box-border w-full rounded-lg border border-gray-700 bg-gray-800 px-2.5 py-2 text-sm text-white outline-none focus:border-emerald-500"
+          value={userData.phone}
+          onChange={(e) =>
+            setUserData((prev) => ({ ...prev, phone: e.target.value }))
+          }
+        />
+      ) : (
+        <p className="m-0 text-[0.92rem] text-white">{userData.phone}</p>
+      )}
+
+      <p className="m-0 text-sm font-semibold text-gray-300">Address:</p>
+      {edit ? (
+        <div className="flex flex-col gap-1.5">
           <input
             type="text"
-            className="mp-inp mp-name-inp"
-            value={userData.name}
+            className="box-border w-full rounded-lg border border-gray-700 bg-gray-800 px-2.5 py-2 text-sm text-white outline-none focus:border-emerald-500"
+            value={userData.address.line1 || ""}
             onChange={(e) =>
-              setUserData((prev) => ({ ...prev, name: e.target.value }))
+              setUserData((prev) => ({
+                ...prev,
+                address: { ...prev.address, line1: e.target.value },
+              }))
             }
           />
-        ) : (
-          <h2 className="mp-title">{userData.name}</h2>
-        )}
-      </div>
-
-      <hr className="mp-divider" />
-
-      <div className="mp-sec">
-        <p className="mp-head">CONTACT INFORMATION</p>
-        <div className="mp-grid">
-          <p className="mp-lbl">Email id:</p>
-          <p className="mp-val mp-link">{userData.email}</p>
-
-          <p className="mp-lbl">Phone:</p>
-          {edit ? (
-            <input
-              type="text"
-              className="mp-inp"
-              value={userData.phone}
-              onChange={(e) =>
-                setUserData((prev) => ({ ...prev, phone: e.target.value }))
-              }
-            />
-          ) : (
-            <p className="mp-val">{userData.phone}</p>
-          )}
-
-          <p className="mp-lbl">Address:</p>
-          {edit ? (
-            <div className="mp-col">
-              <input
-                type="text"
-                className="mp-inp"
-                value={userData.address.line1 || ""}
-                onChange={(e) =>
-                  setUserData((prev) => ({
-                    ...prev,
-                    address: { ...prev.address, line1: e.target.value },
-                  }))
-                }
-              />
-              <input
-                type="text"
-                className="mp-inp"
-                value={userData.address.line2 || ""}
-                onChange={(e) =>
-                  setUserData((prev) => ({
-                    ...prev,
-                    address: { ...prev.address, line2: e.target.value },
-                  }))
-                }
-              />
-            </div>
-          ) : (
-            <p className="mp-val">
-              {userData.address?.line1}
-              <br />
-              {userData.address?.line2}
-            </p>
-          )}
+          <input
+            type="text"
+            className="box-border w-full rounded-lg border border-gray-700 bg-gray-800 px-2.5 py-2 text-sm text-white outline-none focus:border-emerald-500"
+            value={userData.address.line2 || ""}
+            onChange={(e) =>
+              setUserData((prev) => ({
+                ...prev,
+                address: { ...prev.address, line2: e.target.value },
+              }))
+            }
+          />
         </div>
-      </div>
-
-      <div className="mp-sec">
-        <p className="mp-head">BASIC INFORMATION</p>
-        <div className="mp-grid">
-          <p className="mp-lbl">Gender:</p>
-          {edit ? (
-            <select
-              className="mp-inp"
-              value={userData.gender}
-              onChange={(e) =>
-                setUserData((prev) => ({ ...prev, gender: e.target.value }))
-              }
-            >
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
-          ) : (
-            <p className="mp-val">{userData.gender}</p>
-          )}
-
-          <p className="mp-lbl">Birth date:</p>
-          {edit ? (
-            <input
-              type="date"
-              className="mp-inp"
-              value={userData.dob === "Not Selected" ? "" : userData.dob}
-              onChange={(e) =>
-                setUserData((prev) => ({ ...prev, dob: e.target.value }))
-              }
-            />
-          ) : (
-            <p className="mp-val">{userData.dob}</p>
-          )}
-        </div>
-      </div>
-
-      <div style={{ marginTop: "24px" }}>
-        {edit ? (
-          <button className="mp-btn mp-save" onClick={(e) => handleSave(e)}>
-            Save Information
-          </button>
-        ) : (
-          <button className="mp-btn mp-edit" onClick={() => setEdit(true)}>
-            Edit
-          </button>
-        )}
-      </div>
+      ) : (
+        <p className="m-0 text-[0.92rem] text-white">
+          {userData.address?.line1}
+          <br />
+          {userData.address?.line2}
+        </p>
+      )}
     </div>
+  </div>
+
+  <div className="mb-6">
+    <p className="mb-3.5 text-xs font-bold tracking-[0.08em] text-gray-400 underline underline-offset-4">
+      BASIC INFORMATION
+    </p>
+
+    <div className="grid grid-cols-1 items-center gap-x-5 gap-y-1 min-[481px]:grid-cols-[160px_minmax(0,1fr)] min-[481px]:gap-y-3.5">
+      <p className="m-0 text-sm font-semibold text-gray-300">Gender:</p>
+      {edit ? (
+        <select
+          className="box-border w-full rounded-lg border border-gray-700 bg-gray-800 px-2.5 py-2 text-sm text-white outline-none focus:border-emerald-500"
+          value={userData.gender}
+          onChange={(e) =>
+            setUserData((prev) => ({ ...prev, gender: e.target.value }))
+          }
+        >
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+      ) : (
+        <p className="m-0 text-[0.92rem] text-white">{userData.gender}</p>
+      )}
+
+      <p className="m-0 text-sm font-semibold text-gray-300">Birth date:</p>
+      {edit ? (
+        <input
+          type="date"
+          className="box-border w-full rounded-lg border border-gray-700 bg-gray-800 px-2.5 py-2 text-sm text-white scheme-dark outline-none focus:border-emerald-500"
+          value={userData.dob === "Not Selected" ? "" : userData.dob}
+          onChange={(e) =>
+            setUserData((prev) => ({ ...prev, dob: e.target.value }))
+          }
+        />
+      ) : (
+        <p className="m-0 text-[0.92rem] text-white">{userData.dob}</p>
+      )}
+    </div>
+  </div>
+
+  <div className="mt-6">
+    {edit ? (
+      <button
+        className="cursor-pointer rounded-lg border-none bg-emerald-500 px-5.5 py-2.5 text-[0.95rem] font-semibold text-white transition-colors duration-200 hover:bg-emerald-600"
+        onClick={(e) => handleSave(e)}
+      >
+        Save Information
+      </button>
+    ) : (
+      <button
+        className="cursor-pointer rounded-lg border border-emerald-500 bg-transparent px-5.5 py-2.5 text-[0.95rem] font-semibold text-emerald-500 transition-colors duration-200 hover:bg-emerald-500 hover:text-white"
+        onClick={() => setEdit(true)}
+      >
+        Edit
+      </button>
+    )}
+  </div>
+</div>
   );
 };
 
