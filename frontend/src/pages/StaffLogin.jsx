@@ -7,7 +7,7 @@ import { StaffAuthContext } from "../App.jsx";
 import { useNavigate } from "react-router-dom";
 
 const StaffLogin = () => {
-  const naviagte = useNavigate();
+  const navigate = useNavigate();
   const [state, setState] = useState("Admin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
