@@ -61,52 +61,85 @@ const doctorsAll = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200,doctors,'doctos fetched properly'));
 });
 
+
 const doctorLogin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  if (!email) {
-    throw new ApiError(400, "Email is required");
+
+  if (!email || !password) {
+    throw new ApiError(400, "Email and password are required");
   }
 
- const doctor = await Doctor.findOne({
-    $or: [{ email }],
-  });
+  const doctor = await Doctor.findOne({ email });
+
   if (!doctor) {
     throw new ApiError(404, "Doctor does not exist");
   }
 
   const isPasswordValid = await doctor.isPasswordCorrect(password);
+
   if (!isPasswordValid) {
-    throw new ApiError(401, "Invalid doctor Credentials");
+    throw new ApiError(401, "Invalid doctor credentials");
   }
 
-  const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
-    doctor._id,
-  );
+  const { accessToken, refreshToken } =
+    await generateAccessAndRefreshTokens(doctor._id);
+
   const loggedInDoctor = await Doctor.findById(doctor._id).select(
     "-password -refreshToken"
   );
 
-  const options = {
+  const cookieOptions = {
     httpOnly: true,
     secure: true,
+    sameSite: "none",
+    path: "/",
   };
 
   return res
     .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
+    .cookie("doctorAccessToken", accessToken, cookieOptions)
+    .cookie("doctorRefreshToken", refreshToken, cookieOptions)
     .json(
       new ApiResponse(
         200,
         {
           doctor: loggedInDoctor,
-          accessToken,
-          refreshToken,
         },
-        "Doctor logged in Successfully",
-      ),
+        "Doctor logged in successfully"
+      )
     );
 });
+
+
+const logoutDoctor = asyncHandler(async (req, res) => {
+  const refreshToken = req.cookies?.doctorRefreshToken;
+
+  // Invalidate the saved refresh token, if one exists.
+  if (refreshToken) {
+    await Doctor.findOneAndUpdate(
+      { refreshToken },
+      { $unset: { refreshToken: 1 } }
+    );
+  }
+
+  const cookieOptions = {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
+  };
+
+  return res
+    .clearCookie("doctorAccessToken", cookieOptions)
+    .clearCookie("doctorRefreshToken", cookieOptions)
+    .status(200)
+    .json({
+      success: true,
+      message: "Doctor logged out successfully",
+    });
+});
+
+
 
 const doctorAppointments = asyncHandler(async(req,res)=>{
 
@@ -280,4 +313,5 @@ export { changeAvailability,
         doctorDashboard,
         doctorProfile,
         updateDoctorProfile,
+        logoutDoctor
       };

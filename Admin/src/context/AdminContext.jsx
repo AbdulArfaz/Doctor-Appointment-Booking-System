@@ -6,108 +6,106 @@ export const AdminContext = createContext();
 
 const AdminContextProvider = (props) => {
   const [doctorslist, setDoctorslist] = useState([]);
- const [appointments,setAppointments] = useState([])
-  const [adminToken, setAdminToken] = useState(
-    localStorage.getItem("accessToken") || "",
-  );
-  const[dashData,setDashData] = useState(false)
+  const [appointments, setAppointments] = useState([]);
+  const [dashData, setDashData] = useState(false);
 
   const backendurl = import.meta.env.VITE_BACKEND_URL;
 
+  const api = axios.create({
+    baseURL: backendurl,
+    withCredentials: true,
+  });
+
   const getAllDoctorsList = async () => {
     try {
-      const { data } = await axios.post(
-        backendurl + "/api/admin/all-doctors",
-        {},
-        { headers: {aToken: adminToken } },
-      );
+      const { data } = await api.post("/api/admin/all-doctors", {});
+
       if (data.success) {
         setDoctorslist(data.data);
       } else {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(
+        error.response?.data?.message || error.message
+      );
     }
   };
 
   const changeAvailability = async (docId) => {
     try {
-      const { data } = await axios.post(
-        backendurl + "/api/admin/change-availability",
-        { docId },
-        { headers: { aToken: adminToken } },
+      const { data } = await api.post(
+        "/api/admin/change-availability",
+        { docId }
       );
+
       if (data.success) {
         toast.success(data.message);
-        getAllDoctorsList();
+        await getAllDoctorsList();
       } else {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(
+        error.response?.data?.message || error.message
+      );
     }
-  }
+  };
 
-  const getAllAppointments = async () =>{
+  const getAllAppointments = async () => {
     try {
-        const { data }= await axios.get(`${backendurl}/api/admin/appointments`,
-            {headers:{aToken: adminToken}}
-        )
-        if(data.success){
-            setAppointments(data.appointments)
-        } else {
-            toast.error(data.message)
-        }
-    } catch (error) {
-        toast.error(error.message)
-    }
-  }
+      const { data } = await api.get("/api/admin/appointments");
 
-  
-  const getDashData = async () =>{
-    try {
-
-      const { data } = await axios.get(`${backendurl}/api/admin/dashboard`,
-        {headers: {aToken: adminToken}}
-      )
-      if(data.success){
-        setDashData(data.data)
-        
+      if (data.success) {
+        setAppointments(data.appointments);
       } else {
-        toast.error(data.message)
+        toast.error(data.message);
       }
-      
     } catch (error) {
-      toast.error(error.message)
+      toast.error(
+        error.response?.data?.message || error.message
+      );
     }
-  }
+  };
 
-  const adminAppointmentCancel =async (appointmentId) =>{
-
+  const getDashData = async () => {
     try {
-      
-     const { data } = await axios.post(`${backendurl}/api/admin/cancel-appointment`,
-      {appointmentId},
-      {headers: {aToken: adminToken}}
-     )
-     if (data.success) {
-      toast.success(data.message)
-      getDashData()
-      getAllAppointments()
-     } else {
-      toast.error(data.message)
-     }
+      const { data } = await api.get("/api/admin/dashboard");
 
+      if (data.success) {
+        setDashData(data.data);
+      } else {
+        toast.error(data.message);
+      }
     } catch (error) {
-       toast.error(error.message)
+      toast.error(
+        error.response?.data?.message || error.message
+      );
     }
-  }
+  };
 
+  const adminAppointmentCancel = async (appointmentId) => {
+    try {
+      const { data } = await api.post(
+        "/api/admin/cancel-appointment",
+        { appointmentId }
+      );
+
+      if (data.success) {
+        toast.success(data.message);
+        await getDashData();
+        await getAllAppointments();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || error.message
+      );
+    }
+  };
 
   const value = {
-    adminToken,
-    setAdminToken,
     backendurl,
     doctorslist,
     getAllDoctorsList,
@@ -116,13 +114,16 @@ const AdminContextProvider = (props) => {
     setAppointments,
     getAllAppointments,
     adminAppointmentCancel,
-    dashData,setDashData,
+    dashData,
+    setDashData,
     getDashData,
   };
+
   return (
     <AdminContext.Provider value={value}>
       {props.children}
     </AdminContext.Provider>
   );
 };
+
 export default AdminContextProvider;
