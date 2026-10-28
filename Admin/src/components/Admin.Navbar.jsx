@@ -48,9 +48,9 @@ const Navbar = ({ role, onLogout }) => {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-indigo-100/70 bg-white/90 shadow-[0_8px_30px_rgba(60,72,140,0.06)] backdrop-blur-xl">
-      {/* Top bar */}
+
       <div className="flex min-h-19 items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-12">
-        {/* Brand */}
+  
         <NavLink
           to={role === "admin" ? "/admin-dashboard" : "/doctor-dashboard"}
           onClick={closeMenu}
@@ -74,7 +74,7 @@ const Navbar = ({ role, onLogout }) => {
           </div>
         </NavLink>
 
-        {/* User actions */}
+
         <div className="flex items-center gap-2 sm:gap-4">
           <div className="hidden items-center gap-3 rounded-2xl border border-indigo-100/80 bg-linear-to-r from-blue-50/80 to-violet-50/80 px-3 py-2 sm:flex">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-blue-500 to-violet-600 text-sm font-extrabold text-white shadow-md shadow-indigo-500/20">
@@ -113,7 +113,7 @@ const Navbar = ({ role, onLogout }) => {
             Logout
           </button>
 
-          {/* Mobile menu button */}
+   
           <button
             type="button"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -128,7 +128,7 @@ const Navbar = ({ role, onLogout }) => {
         </div>
       </div>
 
-     {/* Navigation */}
+   
 <nav
   className={`${
     menuOpen ? "block" : "hidden"

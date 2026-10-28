@@ -9,10 +9,8 @@ const AdminContextProvider = (props) => {
   const [appointments, setAppointments] = useState([]);
   const [dashData, setDashData] = useState(false);
 
-  // HttpOnly cookie is managed by the browser.
   const backendurl = import.meta.env.VITE_BACKEND_URL;
 
-  // Send cookies with cross-origin requests.
   const api = axios.create({
     baseURL: backendurl,
     withCredentials: true,
