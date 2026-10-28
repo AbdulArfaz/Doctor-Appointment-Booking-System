@@ -143,7 +143,7 @@ const Appointment = () => {
 
   return (
     <div className="mx-auto my-10 max-w-225 px-5 font-[Inter,Arial,sans-serif]">
-      {/* Doctor Card */}
+   
       <div className="flex flex-col gap-8 rounded-3xl border border-gray-200 bg-white/90 p-5 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.08)] min-[641px]:flex-row sm:p-8">
         <div className="h-65 w-full shrink-0 overflow-hidden rounded-[18px] bg-[linear-gradient(135deg,#eef2ff_0%,#e0e7ff_100%)] min-[641px]:h-80 min-[641px]:w-70">
           <img
@@ -204,7 +204,7 @@ const Appointment = () => {
         </div>
       </div>
 
-      {/* Booking Slots */}
+    
       <div className="mt-8 rounded-[20px] border border-slate-200 bg-white p-5 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)] sm:p-7">
         <p className="mb-5 text-lg font-bold text-slate-900">Booking slots</p>
 

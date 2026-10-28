@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { assets } from "../assets/assets";
-import "../styles/MyProfile.css";
 import axios from "axios";
 import { AppContext } from "../context/AppContext";
 
@@ -15,7 +14,7 @@ const MyProfile = () => {
   const [image, setImage] = useState(false);
   const [edit, setEdit] = useState(false);
 
-  // Use HTTPS for Cloudinary images and provide a fallback.
+
   const secureImageUrl = (url) => {
     if (!url) return assets.profile_pic;
 
